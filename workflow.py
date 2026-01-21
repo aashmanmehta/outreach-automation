@@ -205,32 +205,34 @@ print(email_text)
 # ---------------------------------------------------- CONFIG -----------------------------------------------------
 scopes = ["https://www.googleapis.com/auth/gmail.compose"]
 to = "a406467467@gmail.com"
+resume_path = "replace_resume.pdf"
 
-# 1) OAuth for Gmail
+
+# OAuth for Gmail
 def gmail_service():
     # First time: place Google OAuth client_secret.json in working dir
     flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", scopes=scopes)
     creds = flow.run_local_server(port=0)
     return build("gmail", "v1", credentials=creds)
 
-# 3) Build MIME message with attachment
-def build_message(to, subject, body):
+# Build MIME message with attachment
+def build_message(to, subject, body, attachment_path):
     msg = EmailMessage()
     msg["To"] = to
     msg["Subject"] = subject
     msg["From"] = "me"   # Gmail API replaces 'me' on send/draft
     msg.set_content(body)
-  #  with open(attachment_path, "rb") as f:
-  #      data = f.read()
-   # msg.add_attachment(data, maintype="application", subtype="pdf", filename=os.path.basename(attachment_path))
+    with open(attachment_path, "rb") as f:
+        data = f.read()
+    msg.add_attachment(data, maintype="application", subtype="pdf", filename=os.path.basename(attachment_path))
     return msg
 
-# 4) Create Gmail draft
+# Create Gmail draft
 def create_draft(service, message):
     encoded = base64.urlsafe_b64encode(message.as_bytes()).decode()
     draft = {"message": {"raw": encoded}}
     return service.users().drafts().create(userId="me", body=draft).execute()
-
+    
 if __name__ == "__main__":
     mime = build_message(to, subject, email_text)
     svc = gmail_service()
