@@ -17,7 +17,19 @@ This tool **only creates email drafts** — it does **not** send any emails.
 - Creates a Gmail **draft** in your account (optionally attaches your resume)
 
 ---
+## Configuration
 
+This script expects:
+
+- `OPENAI_API_KEY` in a `.env` file (not committed)
+- `client_secret.json` in the project root (Google OAuth credentials)
+- Update the recipient email in `workflow.py` (`to = "..."`)
+- (Optional) Place your resume PDF locally and set `resume_path = "..."` in `workflow.py`
+
+## How to customize 
+- Change email_examples to sample emails in your tone, relevant to your goals
+- Replace resume_text with your resume's text
+- 
 ## Quickstart
 
 ### 1) Install
@@ -29,3 +41,4 @@ Create and activate a virtual environment, then install dependencies.
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+
