@@ -186,7 +186,7 @@ Example of emails that I have written before: {email_examples}
 
 """
 
-client = OpenAI(client = OpenAI(api_key=os.environ["OPENAI_API_KEY"]))
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 response = client.chat.completions.create(
   model="gpt-5-nano",
@@ -234,7 +234,7 @@ def create_draft(service, message):
     return service.users().drafts().create(userId="me", body=draft).execute()
     
 if __name__ == "__main__":
-    mime = build_message(to, subject, email_text)
+    mime = build_message(to, subject, email_text, resume_path)
     svc = gmail_service()
     draft = create_draft(svc, mime)
     print("Draft created with ID:", draft.get("id"))
